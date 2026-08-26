@@ -15,7 +15,7 @@ public class DetalleMovimiento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "movimiento_id", nullable = false)

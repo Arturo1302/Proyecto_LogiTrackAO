@@ -16,7 +16,7 @@ public class Movimiento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "fecha_hora", insertable = false, updatable = false)
     private LocalDateTime fechaHora;

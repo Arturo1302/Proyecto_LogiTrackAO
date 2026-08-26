@@ -15,6 +15,6 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class BodegaProductoId implements Serializable {
 
-    private Integer bodegaId;
-    private Integer productoId;
+    private Long bodegaId;
+    private Long productoId;
 }
