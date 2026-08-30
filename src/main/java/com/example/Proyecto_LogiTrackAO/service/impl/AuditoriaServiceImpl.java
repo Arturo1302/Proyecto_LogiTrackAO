@@ -2,6 +2,7 @@
 package com.example.Proyecto_LogiTrackAO.service.impl;
 
 import com.example.Proyecto_LogiTrackAO.dto.response.AuditoriaResponse;
+import com.example.Proyecto_LogiTrackAO.exception.ResourceNotFoundException;
 import com.example.Proyecto_LogiTrackAO.mapper.AuditoriaMapper;
 import com.example.Proyecto_LogiTrackAO.model.Auditoria;
 import com.example.Proyecto_LogiTrackAO.model.TipoOperacion;
@@ -29,7 +30,7 @@ public class AuditoriaServiceImpl implements AuditoriaService {
     @Override
     public AuditoriaResponse buscarPorId(Long id) {
         Auditoria auditoria = auditoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Auditoría no encontrada con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Auditoría no encontrada con id: " + id));
         return auditoriaMapper.entityToDto(auditoria);
     }
 

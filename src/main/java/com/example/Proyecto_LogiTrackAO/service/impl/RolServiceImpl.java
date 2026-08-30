@@ -2,11 +2,12 @@ package com.example.Proyecto_LogiTrackAO.service.impl;
 
 import com.example.Proyecto_LogiTrackAO.dto.request.RolRequest;
 import com.example.Proyecto_LogiTrackAO.dto.response.RolResponse;
+import com.example.Proyecto_LogiTrackAO.exception.ResourceNotFoundException;
 import com.example.Proyecto_LogiTrackAO.mapper.RolMapper;
 import com.example.Proyecto_LogiTrackAO.model.Rol;
 import com.example.Proyecto_LogiTrackAO.repository.RolRepository;
 import com.example.Proyecto_LogiTrackAO.service.RolService;
-import lombok.AllArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class RolServiceImpl implements RolService {
     @Override
     public RolResponse actualizar(Long id, RolRequest request) {
         Rol rol = rolRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con id: " + id));
         rol.setNombre(request.nombre());
         Rol actualizado = rolRepository.save(rol);
         return rolMapper.entityToDto(actualizado);
@@ -38,7 +39,7 @@ public class RolServiceImpl implements RolService {
     @Override
     public void eliminar(Long id) {
         if (!rolRepository.existsById(id)) {
-            throw new RuntimeException("Rol no encontrado con id: " + id);
+            throw new ResourceNotFoundException("Rol no encontrado con id: " + id);
         }
         rolRepository.deleteById(id);
     }
@@ -53,7 +54,7 @@ public class RolServiceImpl implements RolService {
     @Override
     public RolResponse buscarPorId(Long id) {
         Rol rol = rolRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con id: " + id));
         return rolMapper.entityToDto(rol);
     }
 }

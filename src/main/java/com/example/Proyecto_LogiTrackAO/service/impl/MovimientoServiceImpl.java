@@ -4,6 +4,8 @@ package com.example.Proyecto_LogiTrackAO.service.impl;
 import com.example.Proyecto_LogiTrackAO.dto.request.DetalleItemRequest;
 import com.example.Proyecto_LogiTrackAO.dto.request.MovimientoRequest;
 import com.example.Proyecto_LogiTrackAO.dto.response.MovimientoResponse;
+import com.example.Proyecto_LogiTrackAO.exception.BusinessRuleException;
+import com.example.Proyecto_LogiTrackAO.exception.ResourceNotFoundException;
 import com.example.Proyecto_LogiTrackAO.mapper.MovimientoMapper;
 import com.example.Proyecto_LogiTrackAO.model.*;
 import com.example.Proyecto_LogiTrackAO.repository.*;
@@ -33,16 +35,16 @@ public class MovimientoServiceImpl implements MovimientoService {
         validarBodegasSegunTipo(request);
 
         Usuario usuario = usuarioRepository.findById(request.usuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + request.usuarioId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + request.usuarioId()));
 
         Bodega bodegaOrigen = request.bodegaOrigenId() != null
                 ? bodegaRepository.findById(request.bodegaOrigenId())
-                .orElseThrow(() -> new RuntimeException("Bodega origen no encontrada"))
+                .orElseThrow(() -> new ResourceNotFoundException("Bodega origen no encontrada"))
                 : null;
 
         Bodega bodegaDestino = request.bodegaDestinoId() != null
                 ? bodegaRepository.findById(request.bodegaDestinoId())
-                .orElseThrow(() -> new RuntimeException("Bodega destino no encontrada"))
+                .orElseThrow(() -> new ResourceNotFoundException("Bodega destino no encontrada"))
                 : null;
 
         // Validar stock ANTES de insertar nada, si el tipo lo requiere
@@ -64,7 +66,7 @@ public class MovimientoServiceImpl implements MovimientoService {
         List<DetalleMovimiento> detallesGuardados = request.detalles().stream()
                 .map(item -> {
                     Producto producto = productoRepository.findById(item.productoId())
-                            .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + item.productoId()));
+                            .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + item.productoId()));
                     DetalleMovimiento detalle = new DetalleMovimiento();
                     detalle.setMovimiento(movimientoGuardado);
                     detalle.setProducto(producto);
@@ -88,7 +90,7 @@ public class MovimientoServiceImpl implements MovimientoService {
     @Override
     public MovimientoResponse buscarPorId(Long id) {
         Movimiento movimiento = movimientoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movimiento no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Movimiento no encontrado con id: " + id));
         List<DetalleMovimiento> detalles = detalleMovimientoRepository.findAll().stream()
                 .filter(d -> d.getMovimiento().getId().equals(id))
                 .toList();
@@ -107,17 +109,17 @@ public class MovimientoServiceImpl implements MovimientoService {
         switch (request.tipo()) {
             case ENTRADA -> {
                 if (request.bodegaDestinoId() == null) {
-                    throw new RuntimeException("Una ENTRADA requiere bodega destino");
+                    throw new BusinessRuleException("Una ENTRADA requiere bodega destino");
                 }
             }
             case SALIDA -> {
                 if (request.bodegaOrigenId() == null) {
-                    throw new RuntimeException("Una SALIDA requiere bodega origen");
+                    throw new BusinessRuleException("Una SALIDA requiere bodega origen");
                 }
             }
             case TRANSFERENCIA -> {
                 if (request.bodegaOrigenId() == null || request.bodegaDestinoId() == null) {
-                    throw new RuntimeException("Una TRANSFERENCIA requiere bodega origen y destino");
+                    throw new BusinessRuleException("Una TRANSFERENCIA requiere bodega origen y destino");
                 }
             }
         }
@@ -126,10 +128,10 @@ public class MovimientoServiceImpl implements MovimientoService {
     private void validarStockSuficiente(Long bodegaId, Long productoId, int cantidadSolicitada) {
         BodegaProductoId id = new BodegaProductoId(bodegaId, productoId);
         BodegaProducto bp = bodegaProductoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "El producto con id " + productoId + " no tiene stock registrado en esa bodega"));
         if (bp.getStock() < cantidadSolicitada) {
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "Stock insuficiente para el producto " + productoId +
                             ". Disponible: " + bp.getStock() + ", solicitado: " + cantidadSolicitada);
         }

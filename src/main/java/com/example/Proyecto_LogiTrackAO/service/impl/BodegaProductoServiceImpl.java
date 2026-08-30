@@ -3,6 +3,7 @@ package com.example.Proyecto_LogiTrackAO.service.impl;
 
 import com.example.Proyecto_LogiTrackAO.dto.request.BodegaProductoRequest;
 import com.example.Proyecto_LogiTrackAO.dto.response.BodegaProductoResponse;
+import com.example.Proyecto_LogiTrackAO.exception.ResourceNotFoundException;
 import com.example.Proyecto_LogiTrackAO.mapper.BodegaProductoMapper;
 import com.example.Proyecto_LogiTrackAO.model.Bodega;
 import com.example.Proyecto_LogiTrackAO.model.BodegaProducto;
@@ -38,9 +39,9 @@ public class BodegaProductoServiceImpl implements BodegaProductoService {
     @Override
     public BodegaProductoResponse crear(BodegaProductoRequest request) {
         Bodega bodega = bodegaRepository.findById(request.bodegaId())
-                .orElseThrow(() -> new RuntimeException("Bodega no encontrada con id: " + request.bodegaId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Bodega no encontrada con id: " + request.bodegaId()));
         Producto producto = productoRepository.findById(request.productoId())
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + request.productoId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + request.productoId()));
         BodegaProducto bp = bodegaProductoMapper.dtoToEntity(bodega, producto, request.stock());
         BodegaProducto guardado = bodegaProductoRepository.save(bp);
         return bodegaProductoMapper.entityToDto(guardado);
@@ -50,7 +51,7 @@ public class BodegaProductoServiceImpl implements BodegaProductoService {
     public BodegaProductoResponse actualizarStock(Long bodegaId, Long productoId, Integer stock) {
         BodegaProductoId id = new BodegaProductoId(bodegaId, productoId);
         BodegaProducto bp = bodegaProductoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Registro no encontrado para esa bodega y producto"));
+                .orElseThrow(() -> new ResourceNotFoundException("Registro no encontrado para esa bodega y producto"));
         bp.setStock(stock);
         BodegaProducto actualizado = bodegaProductoRepository.save(bp);
         return bodegaProductoMapper.entityToDto(actualizado);
@@ -60,7 +61,7 @@ public class BodegaProductoServiceImpl implements BodegaProductoService {
     public void eliminar(Long bodegaId, Long productoId) {
         BodegaProductoId id = new BodegaProductoId(bodegaId, productoId);
         if (!bodegaProductoRepository.existsById(id)) {
-            throw new RuntimeException("Registro no encontrado para esa bodega y producto");
+            throw new ResourceNotFoundException("Registro no encontrado para esa bodega y producto");
         }
         bodegaProductoRepository.deleteById(id);
     }
@@ -76,7 +77,7 @@ public class BodegaProductoServiceImpl implements BodegaProductoService {
     public BodegaProductoResponse buscarPorId(Long bodegaId, Long productoId) {
         BodegaProductoId id = new BodegaProductoId(bodegaId, productoId);
         BodegaProducto bp = bodegaProductoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Registro no encontrado para esa bodega y producto"));
+                .orElseThrow(() -> new ResourceNotFoundException("Registro no encontrado para esa bodega y producto"));
         return bodegaProductoMapper.entityToDto(bp);
     }
 }

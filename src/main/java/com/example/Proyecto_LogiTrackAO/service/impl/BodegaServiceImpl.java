@@ -3,6 +3,7 @@ package com.example.Proyecto_LogiTrackAO.service.impl;
 
 import com.example.Proyecto_LogiTrackAO.dto.request.BodegaRequest;
 import com.example.Proyecto_LogiTrackAO.dto.response.BodegaResponse;
+import com.example.Proyecto_LogiTrackAO.exception.ResourceNotFoundException;
 import com.example.Proyecto_LogiTrackAO.mapper.BodegaMapper;
 import com.example.Proyecto_LogiTrackAO.model.Bodega;
 import com.example.Proyecto_LogiTrackAO.model.Usuario;
@@ -33,7 +34,7 @@ public class BodegaServiceImpl implements BodegaService {
     @Override
     public BodegaResponse actualizarBodega(Long id, BodegaRequest request) {
         Bodega bodega = bodegaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bodega no encontrada con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Bodega no encontrada con id: " + id));
         Usuario encargado = buscarEncargadoSiAplica(request.encargadoId());
         bodega.setNombre(request.nombre());
         bodega.setUbicacion(request.ubicacion());
@@ -46,7 +47,7 @@ public class BodegaServiceImpl implements BodegaService {
     @Override
     public void eliminarBodega(Long id) {
         if (!bodegaRepository.existsById(id)) {
-            throw new RuntimeException("Bodega no encontrada con id: " + id);
+            throw new ResourceNotFoundException("Bodega no encontrada con id: " + id);
         }
         bodegaRepository.deleteById(id);
     }
@@ -61,7 +62,7 @@ public class BodegaServiceImpl implements BodegaService {
     @Override
     public BodegaResponse buscarPorId(Long id) {
         Bodega bodega = bodegaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bodega no encontrada con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Bodega no encontrada con id: " + id));
         return bodegaMapper.entityToDto(bodega);
     }
 
@@ -70,6 +71,6 @@ public class BodegaServiceImpl implements BodegaService {
             return null;
         }
         return usuarioRepository.findById(encargadoId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + encargadoId));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + encargadoId));
     }
 }

@@ -3,6 +3,7 @@ package com.example.Proyecto_LogiTrackAO.service.impl;
 
 import com.example.Proyecto_LogiTrackAO.dto.request.ProductoRequest;
 import com.example.Proyecto_LogiTrackAO.dto.response.ProductoResponse;
+import com.example.Proyecto_LogiTrackAO.exception.ResourceNotFoundException;
 import com.example.Proyecto_LogiTrackAO.mapper.ProductoMapper;
 import com.example.Proyecto_LogiTrackAO.model.Categoria;
 import com.example.Proyecto_LogiTrackAO.model.Producto;
@@ -25,7 +26,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoResponse crearProducto(ProductoRequest request) {
         Categoria categoria = categoriaRepository.findById(request.categoriaId())
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada con id: " + request.categoriaId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con id: " + request.categoriaId()));
         Producto producto = productoMapper.dtoToEntity(request, categoria);
         Producto guardado = productoRepository.save(producto);
         return productoMapper.entityToDto(guardado);
@@ -34,9 +35,9 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoResponse actualizarProducto(Long id, ProductoRequest request) {
         Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + id));
         Categoria categoria = categoriaRepository.findById(request.categoriaId())
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada con id: " + request.categoriaId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con id: " + request.categoriaId()));
         producto.setNombre(request.nombre());
         producto.setCategoria(categoria);
         producto.setPrecio(request.precio());
@@ -47,7 +48,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public void eliminarProducto(Long id) {
         if (!productoRepository.existsById(id)) {
-            throw new RuntimeException("Producto no encontrado con id: " + id);
+            throw new ResourceNotFoundException("Producto no encontrado con id: " + id);
         }
         productoRepository.deleteById(id);
     }
@@ -62,7 +63,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoResponse buscarPorId(Long id) {
         Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + id));
         return productoMapper.entityToDto(producto);
     }
 }

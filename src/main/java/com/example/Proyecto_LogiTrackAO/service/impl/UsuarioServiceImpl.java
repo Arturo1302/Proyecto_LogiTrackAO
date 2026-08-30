@@ -2,6 +2,7 @@ package com.example.Proyecto_LogiTrackAO.service.impl;
 
 import com.example.Proyecto_LogiTrackAO.dto.request.UsuarioRequest;
 import com.example.Proyecto_LogiTrackAO.dto.response.UsuarioResponse;
+import com.example.Proyecto_LogiTrackAO.exception.ResourceNotFoundException;
 import com.example.Proyecto_LogiTrackAO.mapper.UsuarioMapper;
 import com.example.Proyecto_LogiTrackAO.model.Rol;
 import com.example.Proyecto_LogiTrackAO.model.Usuario;
@@ -26,7 +27,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioResponse crearUsuario(UsuarioRequest request) {
         Rol rol = rolRepository.findById(request.rolId())
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con id: " + request.rolId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con id: " + request.rolId()));
         Usuario usuario = usuarioMapper.dtoToEntity(request, rol);
         usuario.setPassword(passwordEncoder.encode(request.password()));
         Usuario guardado = usuarioRepository.save(usuario);
@@ -36,9 +37,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioResponse actualizarUsuario(Long id, UsuarioRequest request) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + id));
         Rol rol = rolRepository.findById(request.rolId())
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con id: " + request.rolId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con id: " + request.rolId()));
         usuario.setUsername(request.username());
         usuario.setEmail(request.email());
         usuario.setPassword(passwordEncoder.encode(request.password()));
@@ -50,7 +51,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void eliminarUsuario(Long id) {
         if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id);
+            throw new ResourceNotFoundException("Usuario no encontrado con id: " + id);
         }
         usuarioRepository.deleteById(id);
     }
@@ -65,7 +66,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioResponse buscarPorId(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + id));
         return usuarioMapper.entityToDto(usuario);
     }
 }
