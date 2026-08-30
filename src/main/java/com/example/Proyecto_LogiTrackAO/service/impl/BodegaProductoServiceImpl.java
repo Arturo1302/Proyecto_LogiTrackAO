@@ -26,6 +26,15 @@ public class BodegaProductoServiceImpl implements BodegaProductoService {
     private final ProductoRepository productoRepository;
     private final BodegaProductoMapper bodegaProductoMapper;
 
+
+    @Override
+    public List<BodegaProductoResponse> obtenerStockBajo(int umbral) {
+        return bodegaProductoRepository.findByStockLessThan(umbral).stream()
+                .map(bodegaProductoMapper::entityToDto)
+                .toList();
+    }
+
+
     @Override
     public BodegaProductoResponse crear(BodegaProductoRequest request) {
         Bodega bodega = bodegaRepository.findById(request.bodegaId())

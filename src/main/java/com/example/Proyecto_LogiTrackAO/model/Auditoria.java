@@ -28,7 +28,7 @@ public class Auditoria {
     private String entidad;
 
     @Column(name = "entidad_id", nullable = false)
-    private Integer entidadId;
+    private Long entidadId;
 
     @Column(name = "fecha_hora", insertable = false, updatable = false)
     private LocalDateTime fechaHora;

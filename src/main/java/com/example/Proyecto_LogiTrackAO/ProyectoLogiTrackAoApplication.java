@@ -8,7 +8,7 @@ public class ProyectoLogiTrackAoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoLogiTrackAoApplication.class, args);
-		System.out.println("API INICIADO");
+		System.out.println("API INICIANDO");
 		System.out.println("....");
 		System.out.println("....");
 		System.out.println("....");

@@ -1,4 +1,3 @@
-// service/impl/UsuarioServiceImpl.java
 package com.example.Proyecto_LogiTrackAO.service.impl;
 
 import com.example.Proyecto_LogiTrackAO.dto.request.UsuarioRequest;
@@ -10,6 +9,7 @@ import com.example.Proyecto_LogiTrackAO.repository.RolRepository;
 import com.example.Proyecto_LogiTrackAO.repository.UsuarioRepository;
 import com.example.Proyecto_LogiTrackAO.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +21,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final UsuarioMapper usuarioMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UsuarioResponse crearUsuario(UsuarioRequest request) {
         Rol rol = rolRepository.findById(request.rolId())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado con id: " + request.rolId()));
         Usuario usuario = usuarioMapper.dtoToEntity(request, rol);
+        usuario.setPassword(passwordEncoder.encode(request.password()));
         Usuario guardado = usuarioRepository.save(usuario);
         return usuarioMapper.entityToDto(guardado);
     }
@@ -39,7 +41,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado con id: " + request.rolId()));
         usuario.setUsername(request.username());
         usuario.setEmail(request.email());
-        usuario.setPassword(request.password());
+        usuario.setPassword(passwordEncoder.encode(request.password()));
         usuario.setRol(rol);
         Usuario actualizado = usuarioRepository.save(usuario);
         return usuarioMapper.entityToDto(actualizado);

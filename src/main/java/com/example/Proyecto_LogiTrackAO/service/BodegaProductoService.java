@@ -12,4 +12,6 @@ public interface BodegaProductoService {
     void eliminar(Long bodegaId, Long productoId);
     List<BodegaProductoResponse> obtenerTodos();
     BodegaProductoResponse buscarPorId(Long bodegaId, Long productoId);
+
+    List<BodegaProductoResponse> obtenerStockBajo(int umbral);
 }
