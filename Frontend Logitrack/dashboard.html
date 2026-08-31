@@ -1,0 +1,194 @@
+<!-- static/dashboard.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LogiTrack — Panel</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31' fill='%2310192B' stroke='%23FFB238' stroke-width='2'/%3E%3Cg stroke='%23FFB238' stroke-width='2' fill='none' stroke-linejoin='round'%3E%3Cpolygon points='32,14 46,22 32,30 18,22'/%3E%3Cpolyline points='18,22 18,42 32,50 32,30'/%3E%3Cpolyline points='46,22 46,42 32,50'/%3E%3C/g%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+    <header class="topbar">
+        <div class="topbar-brand">
+            <svg viewBox="0 0 64 64" width="28" height="28">
+                <g stroke="#FFB238" stroke-width="3" fill="none" stroke-linejoin="round">
+                    <polygon points="32,14 46,22 32,30 18,22"/>
+                    <polyline points="18,22 18,42 32,50 32,30"/>
+                    <polyline points="46,22 46,42 32,50"/>
+                </g>
+            </svg>
+            <span>LOGITRACK</span>
+        </div>
+        <button class="btn-ghost" onclick="logout()">Cerrar sesión</button>
+    </header>
+
+    <nav class="tabbar">
+        <button class="tab active" data-tab="bodegas" onclick="mostrarSeccion('bodegas', this)">Bodegas</button>
+        <button class="tab" data-tab="productos" onclick="mostrarSeccion('productos', this)">Productos</button>
+        <button class="tab" data-tab="categorias" onclick="mostrarSeccion('categorias', this)">Categorías</button>
+        <button class="tab" data-tab="usuarios" onclick="mostrarSeccion('usuarios', this)">Usuarios</button>
+        <button class="tab" data-tab="stock" onclick="mostrarSeccion('stock', this)">Stock</button>
+        <button class="tab" data-tab="movimientos" onclick="mostrarSeccion('movimientos', this)">Movimientos</button>
+        <button class="tab" data-tab="auditorias" onclick="mostrarSeccion('auditorias', this)">Auditorías</button>
+        <button class="tab" data-tab="reporte" onclick="mostrarSeccion('reporte', this)">Reporte</button>
+    </nav>
+
+    <main class="content">
+
+        <section id="bodegas" class="seccion">
+            <h2>Bodegas</h2>
+            <form id="formBodega" class="inline-form">
+                <input type="text" id="bodegaNombre" placeholder="Nombre" required>
+                <input type="text" id="bodegaUbicacion" placeholder="Ubicación" required>
+                <input type="number" id="bodegaCapacidad" placeholder="Capacidad" required>
+                <button type="submit">Crear bodega</button>
+            </form>
+            <table id="tablaBodegas">
+                <thead><tr><th>ID</th><th>Nombre</th><th>Ubicación</th><th>Capacidad</th><th>Encargado</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="productos" class="seccion" style="display:none">
+            <h2>Productos</h2>
+            <form id="formProducto" class="inline-form">
+                <input type="text" id="productoNombre" placeholder="Nombre" required>
+                <select id="productoCategoria" required></select>
+                <input type="number" id="productoPrecio" placeholder="Precio" step="0.01" required>
+                <button type="submit">Crear producto</button>
+            </form>
+            <table id="tablaProductos">
+                <thead><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="categorias" class="seccion" style="display:none">
+            <h2>Categorías</h2>
+            <form id="formCategoria" class="inline-form">
+                <input type="text" id="categoriaNombre" placeholder="Nombre" required>
+                <input type="text" id="categoriaDescripcion" placeholder="Descripción">
+                <button type="submit">Crear categoría</button>
+            </form>
+            <table id="tablaCategorias">
+                <thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="usuarios" class="seccion" style="display:none">
+            <h2>Usuarios</h2>
+            <form id="formUsuario" class="inline-form">
+                <input type="text" id="usuarioUsername" placeholder="Username" required>
+                <input type="email" id="usuarioEmail" placeholder="Email" required>
+                <input type="password" id="usuarioPassword" placeholder="Contraseña" required>
+                <select id="usuarioRol" required></select>
+                <button type="submit">Crear usuario</button>
+            </form>
+            <table id="tablaUsuarios">
+                <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Rol</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="stock" class="seccion" style="display:none">
+            <h2>Stock por bodega</h2>
+            <form id="formStock" class="inline-form">
+                <select id="stockBodega" required></select>
+                <select id="stockProducto" required></select>
+                <input type="number" id="stockCantidad" placeholder="Stock inicial" min="0" required>
+                <button type="submit">Registrar stock</button>
+            </form>
+            <div class="stock-filtro">
+                <label for="umbralStock">Ver solo stock bajo de:</label>
+                <input type="number" id="umbralStock" value="10" min="0">
+                <button type="button" id="btnFiltrarStock" class="btn-ghost-dark">Filtrar</button>
+                <button type="button" id="btnVerTodoStock" class="btn-ghost-dark">Ver todo</button>
+            </div>
+            <table id="tablaStock">
+                <thead><tr><th>Bodega</th><th>Producto</th><th>Stock</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="movimientos" class="seccion" style="display:none">
+            <h2>Movimientos</h2>
+            <form id="formMovimiento" class="movimiento-form">
+                <div class="form-row">
+                    <select id="movTipo" required>
+                        <option value="">Tipo de movimiento</option>
+                        <option value="ENTRADA">Entrada</option>
+                        <option value="SALIDA">Salida</option>
+                        <option value="TRANSFERENCIA">Transferencia</option>
+                    </select>
+                    <select id="movUsuario" required></select>
+                </div>
+                <div class="form-row">
+                    <select id="movBodegaOrigen"><option value="">Bodega origen</option></select>
+                    <select id="movBodegaDestino"><option value="">Bodega destino</option></select>
+                </div>
+                <div id="detalleItems"></div>
+                <button type="button" id="btnAgregarItem" class="btn-add">+ Agregar producto</button>
+                <button type="submit">Registrar movimiento</button>
+                <p id="movError" class="error" role="alert"></p>
+            </form>
+
+            <div class="stock-filtro">
+                <label for="movFechaInicio">Rango:</label>
+                <input type="date" id="movFechaInicio">
+                <input type="date" id="movFechaFin">
+                <button type="button" id="btnFiltrarMov" class="btn-ghost-dark">Filtrar</button>
+                <button type="button" id="btnVerTodoMov" class="btn-ghost-dark">Ver todo</button>
+            </div>
+            <table id="tablaMovimientos">
+                <thead><tr><th>ID</th><th>Fecha</th><th>Tipo</th><th>Usuario</th><th>Origen</th><th>Destino</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="auditorias" class="seccion" style="display:none">
+            <h2>Auditorías</h2>
+            <div class="stock-filtro">
+                <input type="text" id="auditUsuario" placeholder="Filtrar por usuario (ej: root@localhost)">
+                <select id="auditOperacion">
+                    <option value="">Todas las operaciones</option>
+                    <option value="INSERT">INSERT</option>
+                    <option value="UPDATE">UPDATE</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+                <button type="button" id="btnFiltrarAudit" class="btn-ghost-dark">Filtrar</button>
+                <button type="button" id="btnVerTodoAudit" class="btn-ghost-dark">Ver todo</button>
+            </div>
+            <table id="tablaAuditorias">
+                <thead><tr><th>ID</th><th>Operación</th><th>Entidad</th><th>Id</th><th>Fecha</th><th>Usuario</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="reporte" class="seccion" style="display:none">
+            <h2>Reporte general</h2>
+            <button id="btnActualizarReporte" class="btn-ghost-dark">Actualizar</button>
+            <div id="reporteContenido" class="reporte-grid"></div>
+        </section>
+
+    </main>
+
+    <!-- Modal genérico de edición -->
+    <div id="modalOverlay" class="modal-overlay" style="display:none">
+        <div class="modal">
+            <h3 id="modalTitle"></h3>
+            <div id="modalFields"></div>
+            <div class="modal-actions">
+                <button id="modalCancel" class="btn-ghost-dark">Cancelar</button>
+                <button id="modalSave">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

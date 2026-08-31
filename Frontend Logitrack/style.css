@@ -1,0 +1,167 @@
+/* static/css/style.css */
+* { box-sizing: border-box; font-family: Arial, sans-serif; }
+body { margin: 0; background: #f4f4f4; }
+
+.login-container {
+    max-width: 320px;
+    margin: 100px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.error { color: red; font-size: 14px; }
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e293b;
+    color: white;
+    padding: 15px 30px;
+}
+nav { display: flex; gap: 10px; padding: 15px 30px; background: white; }
+nav button {
+    padding: 8px 16px;
+    border: 1px solid #2563eb;
+    background: white;
+    color: #2563eb;
+    border-radius: 4px;
+    cursor: pointer;
+}
+main { padding: 20px 30px; }
+table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+form input { padding: 8px; margin-right: 8px; border: 1px solid #ccc; border-radius: 4px; }
+form button { padding: 8px 16px; background: #16a34a; color: white; border: none; border-radius: 4px; cursor: pointer; }
+
+
+/* ===== Login ===== */
+.login-page { margin: 0; font-family: 'IBM Plex Sans', sans-serif; background: #10192B; }
+
+.split { display: flex; min-height: 100vh; }
+.split-panel { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+
+.split-panel:first-child { background: #10192B; }
+.route-pattern { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.brand { position: relative; text-align: center; color: #F1EAD9; padding: 40px; }
+.badge { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 84px; border: 2px solid #FFB238; border-radius: 50%; margin-bottom: 24px; }
+.brand h1 { font-family: 'Oswald', sans-serif; font-size: 2.75rem; font-weight: 700; letter-spacing: 0.08em; margin: 0; }
+.brand .tagline { font-size: 0.95rem; color: #9AA7BD; margin-top: 10px; max-width: 280px; margin-left: auto; margin-right: auto; }
+
+.form-panel { background: #16233A; }
+
+.manifest-card {
+    position: relative;
+    width: 340px;
+    background: #F1EAD9;
+    color: #1B1B18;
+    padding: 44px 32px 28px;
+    border: 1.5px dashed #C9BFA6;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+    opacity: 0;
+    transform: scale(0.96) rotate(-2deg);
+}
+@media (prefers-reduced-motion: no-preference) {
+    .manifest-card { animation: stamp 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .manifest-card { opacity: 1; transform: none; }
+}
+@keyframes stamp {
+    to { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.manifest-seal {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px; height: 44px;
+    background: #FFB238;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.manifest-code { font-family: 'IBM Plex Sans', monospace; font-size: 0.7rem; letter-spacing: 0.12em; color: #8A7F63; margin: 6px 0 18px; text-align: center; }
+.manifest-card h2 { font-family: 'Oswald', sans-serif; font-size: 1.5rem; margin: 0 0 6px; text-align: center; }
+.manifest-sub { font-size: 0.85rem; color: #5C5644; text-align: center; margin: 0 0 24px; }
+
+.manifest-card label { display: block; font-size: 0.75rem; letter-spacing: 0.04em; color: #5C5644; margin-bottom: 4px; }
+.manifest-card input {
+    width: 100%; border: none; border-bottom: 1.5px solid #C9BFA6;
+    background: transparent; padding: 8px 2px; margin-bottom: 20px;
+    font-family: 'IBM Plex Sans', sans-serif; font-size: 0.95rem; color: #1B1B18;
+}
+.manifest-card input:focus { outline: none; border-bottom-color: #FFB238; }
+
+.manifest-card button {
+    width: 100%; padding: 12px; background: #10192B; color: #F1EAD9;
+    border: none; font-family: 'Oswald', sans-serif; letter-spacing: 0.05em;
+    font-size: 0.95rem; cursor: pointer; transition: background 0.15s ease;
+}
+.manifest-card button:hover { background: #FFB238; color: #10192B; }
+.manifest-card button:active { transform: scale(0.97); }
+.manifest-card button:disabled { opacity: 0.6; cursor: default; }
+
+.error { color: #B3261E; font-size: 0.82rem; text-align: center; min-height: 18px; margin: 10px 0 0; }
+.fine-print { font-size: 0.68rem; color: #8A7F63; text-align: center; margin-top: 20px; letter-spacing: 0.02em; }
+
+@media (max-width: 860px) {
+    .split { flex-direction: column; }
+    .split-panel:first-child { min-height: 200px; padding: 20px 0; }
+    .brand h1 { font-size: 2rem; }
+    .badge { width: 60px; height: 60px; margin-bottom: 12px; }
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////// */
+.btn-edit { background: none; border: 1.5px solid #10192B; color: #10192B; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; margin-right: 6px; }
+.btn-edit:hover { background: #10192B; color: #F1EAD9; }
+.btn-delete { background: none; border: 1.5px solid #B3261E; color: #B3261E; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; }
+.btn-delete:hover { background: #B3261E; color: #fff; }
+
+.stock-filtro { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.stock-filtro input, .stock-filtro select { padding: 8px; border: 1.5px solid #C9BFA6; }
+
+select { padding: 9px 10px; border: 1.5px solid #C9BFA6; background: #fff; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem; }
+
+.movimiento-form { background: #fff; border: 1.5px dashed #C9BFA6; padding: 20px; margin-bottom: 20px; max-width: 500px; }
+.form-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.form-row select { flex: 1; }
+.movimiento-form > button[type="submit"] { width: 100%; margin-top: 10px; padding: 10px; background: #10192B; color: #F1EAD9; border: none; font-family: 'Oswald', sans-serif; cursor: pointer; }
+.movimiento-form > button[type="submit"]:hover { background: #FFB238; color: #10192B; }
+
+.detalle-item { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+.detalle-item select { flex: 2; }
+.detalle-item input { flex: 1; padding: 8px; border: 1.5px solid #C9BFA6; }
+.btn-remove { background: none; border: none; color: #B3261E; font-size: 1.2rem; cursor: pointer; line-height: 1; }
+.btn-add { background: none; border: 1.5px dashed #10192B; padding: 8px 14px; margin-bottom: 14px; cursor: pointer; font-size: 0.85rem; }
+.btn-ghost-dark { background: none; border: 1.5px solid #10192B; color: #10192B; padding: 6px 14px; cursor: pointer; font-size: 0.85rem; }
+.btn-ghost-dark:hover { background: #10192B; color: #F1EAD9; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(16,25,43,0.55); display: flex; align-items: center; justify-content: center; z-index: 100; }
+.modal { background: #F1EAD9; border: 1.5px dashed #C9BFA6; padding: 28px; width: 340px; }
+.modal h3 { font-family: 'Oswald', sans-serif; margin: 0 0 18px; }
+.modal label { display: block; font-size: 0.75rem; color: #5C5644; margin-bottom: 4px; }
+.modal input, .modal select { width: 100%; padding: 8px; margin-bottom: 14px; border: 1.5px solid #C9BFA6; background: #fff; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.modal-actions button:last-child { background: #10192B; color: #F1EAD9; border: none; padding: 8px 18px; cursor: pointer; font-family: 'Oswald', sans-serif; }
+.modal-actions button:last-child:hover { background: #FFB238; color: #10192B; }
