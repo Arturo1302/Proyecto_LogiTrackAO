@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface BodegaRepository extends JpaRepository<Bodega, Long> {
 
+    List<Bodega> obtenerTodas(String nombre);
     List<Bodega> findByNombre(String nombre);
     List<Bodega> findByUbicacion(String ubicacion);
     List<Bodega> findByEncargado(Usuario encargado);

@@ -1,7 +1,10 @@
 package com.example.Proyecto_LogiTrackAO.controller;
 
 import com.example.Proyecto_LogiTrackAO.dto.request.BodegaRequest;
+import com.example.Proyecto_LogiTrackAO.dto.request.ProductoRequest;
 import com.example.Proyecto_LogiTrackAO.dto.response.BodegaResponse;
+import com.example.Proyecto_LogiTrackAO.dto.response.ProductoResponse;
+import com.example.Proyecto_LogiTrackAO.model.Bodega;
 import com.example.Proyecto_LogiTrackAO.service.BodegaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,6 +47,12 @@ public class BodegaController {
         return ResponseEntity.ok(bodegaService.obtenerBodegas());
     }
 
+
+    @PostMapping
+    public ResponseEntity<BodegaResponse> crear(@Valid @RequestBody BodegaRequest request) {
+        BodegaResponse creado = bodegaService.crearbodega( request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    }
     @Operation(summary = "Busca una bodega por id",
             description = "Devuelve los datos de una bodega específica, incluyendo su encargado si tiene.")
     @ApiResponses(value = {

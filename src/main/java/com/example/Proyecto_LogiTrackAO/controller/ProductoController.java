@@ -40,7 +40,7 @@ public class ProductoController {
     @Operation(summary = "Lista todos los productos",
             description = "Devuelve el listado completo de productos registrados.")
     @GetMapping
-    public ResponseEntity<List<ProductoResponse>> obtenerTodos() {
+    public ResponseEntity<List<ProductoResponse>> obtenerProductos( ) {
         return ResponseEntity.ok(productoService.obtenerProductos());
     }
 
